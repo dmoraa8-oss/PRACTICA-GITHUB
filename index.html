@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Cronómetro</title>
+<style>
+  * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+  body {
+    background: #1a1a2e;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    color: white;
+  }
+  .app {
+    text-align: center;
+    background: #16213e;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    width: 400px;
+  }
+  h1 { margin: 0 0 20px; color: #00d4ff; }
+  .display {
+    font-size: 60px;
+    font-weight: bold;
+    margin: 30px 0;
+    font-family: 'Courier New', monospace;
+    color: #00ff88;
+    letter-spacing: 2px;
+  }
+  .buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+  }
+  button {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+  }
+  .start { background: #00b894; }
+  .start:hover { background: #00997a; }
+  .pause { background: #fdcb6e; color: #333; }
+  .pause:hover { background: #e0a838; }
+  .reset { background: #d63031; }
+  .reset:hover { background: #a82525; }
+</style>
+</head>
+<body>
+  <div class="app">
+    <h1>⏱️ Cronómetro</h1>
+    <div class="display" id="display">00:00:00</div>
+    <div class="buttons">
+      <button class="start" id="btnStart" onclick="start()">Iniciar</button>
+      <button class="pause" onclick="pause()">Pausar</button>
+      <button class="reset" onclick="reset()">Reiniciar</button>
+    </div>
+  </div>
+
+<script>
+let hours = 0, minutes = 0, seconds = 0;
+let interval = null;
+let running = false;
+
+function updateDisplay() {
+  const h = String(hours).padStart(2, '0');
+  const m = String(minutes).padStart(2, '0');
+  const s = String(seconds).padStart(2, '0');
+  document.getElementById('display').textContent = `${h}:${m}:${s}`;
+}
+
+function tick() {
+  seconds++;
+  if (seconds === 60) { seconds = 0; minutes++; }
+  if (minutes === 60) { minutes = 0; hours++; }
+  updateDisplay();
+}
+
+function start() {
+  if (running) return;
+  running = true;
+  interval = setInterval(tick, 1000);
+}
+
+function pause() {
+  running = false;
+  clearInterval(interval);
+}
+
+function reset() {
+  pause();
+  hours = minutes = seconds = 0;
+  updateDisplay();
+}
+
+updateDisplay();
+</script>
+</body>
+</html>
