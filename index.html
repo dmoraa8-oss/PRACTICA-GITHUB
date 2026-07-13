@@ -92,11 +92,27 @@ button:active {
 .start { background: linear-gradient(135deg, #00b894, #00cec9); }
 .start:hover { background: linear-gradient(135deg, #00997a, #00a8a3); }
 
-.pause { background: linear-gradient(135deg, #fdcb6e, #f39c12); color: #333; }
-.pause:hover { background: linear-gradient(135deg, #e0a838, #d68910); }
+  .reset:hover { background: #a82525; }
+  .lap { background: linear-gradient(135deg, #6c5ce7, #a29bfe); }
+  .lap:hover { background: linear-gradient(135deg, #5a4bd1, #8b85e0); }
 
-.reset { background: linear-gradient(135deg, #e74c3c, #c0392b); }
-.reset:hover { background: linear-gradient(135deg, #c0392b, #a93226); }
+  .laps {
+    margin-top: 25px;
+    max-height: 200px;
+    overflow-y: auto;
+    text-align: left;
+  }
+
+  .laps li {
+    list-style: none;
+    padding: 10px 15px;
+    margin: 5px 0;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+    display: flex;
+    justify-content: space-between;
+  }
 </style>
 
 </head>
@@ -116,75 +132,24 @@ button:active {
       <button class="pause" onclick="pause()">Pausar</button>
 
       <button class="reset" onclick="reset()">Reiniciar</button>
+      <button class="lap" onclick="lap()">Vuelta</button>
 
     </div>
-
+  <ul class="laps" id="laps"></ul>
   </div>
 
 
 <script>
 
-let hours = 0, minutes = 0, seconds = 0;
+let lapCount = 0;
 
-let interval = null;
-
-let running = false;
-
-
-function updateDisplay() {
-
-  const h = String(hours).padStart(2, '0');
-
-  const m = String(minutes).padStart(2, '0');
-
-  const s = String(seconds).padStart(2, '0');
-
-  document.getElementById('display').textContent = `${h}:${m}:${s}`;
-
-}
-
-
-function tick() {
-
-  seconds++;
-
-  if (seconds === 60) { seconds = 0; minutes++; }
-
-  if (minutes === 60) { minutes = 0; hours++; }
-
-  updateDisplay();
-
-}
-
-
-function start() {
-
-  if (running) return;
-
-  running = true;
-
-  interval = setInterval(tick, 1000);
-
-}
-
-
-function pause() {
-
-  running = false;
-
-  clearInterval(interval);
-
-}
-
-
-function reset() {
-
-  pause();
-
-  hours = minutes = seconds = 0;
-
-  updateDisplay();
-
+function lap() {
+  if (!running) return;
+  lapCount++;
+  const ul = document.getElementById('laps');
+  const li = document.createElement('li');
+  li.innerHTML = `<span>Vuelta ${lapCount}</span><span>${document.getElementById('display').textContent}</span>`;
+  ul.prepend(li);
 }
 
 
